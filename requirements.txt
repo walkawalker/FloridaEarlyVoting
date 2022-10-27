@@ -5,3 +5,4 @@ plotly-geo==1.0.0
 geopandas==0.3.0
 pyshp==1.2.10
 shapely==1.5.16
+pyproj==2.5.0
