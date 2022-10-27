@@ -4,6 +4,13 @@ Created on Thu Oct 27 10:36:58 2022
 
 @author: whill
 """
+import conda
+import os
+
+conda_file_dir = conda.__file__
+conda_dir = conda_file_dir.split('lib')[0]
+proj_lib = os.path.join(os.path.join(conda_dir, 'share'), 'proj')
+os.environ["PROJ_LIB"] = proj_lib
 import streamlit as st
 import pandas as pd
 import numpy as np
