@@ -10,7 +10,6 @@ import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
 import requests
-import plotly.express as px
 import plotly.figure_factory as ff
 
 def counties():
