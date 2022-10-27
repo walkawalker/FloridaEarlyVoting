@@ -4,4 +4,3 @@ lxml==4.6.2
 plotly-geo==1.0.0
 geopandas==0.3.0
 pyshp==1.2.10
-pyproj==2.5.0
