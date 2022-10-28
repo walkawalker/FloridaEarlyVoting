@@ -72,8 +72,9 @@ def makeplot(df, check_flag):
 if __name__ == "__main__":
     dfc = counties()
     df1, df2, df3 = florida(dfc)
-    st.set_page_config(page_title = 'Florida Early Voting Dashboard', layout = 'wide')
-    st.title('The data was last updated at: ' + df1['Compiled'][0])
+    st.set_page_config(page_title = 'Early Voting Dashboard', layout = 'wide')
+    st.title('Midterm Elections 2022: Early Voting Dashboard')
+    st.text('The data was last updated at: ' + df1['Compiled'][0])
     with st.container():
         party = st.radio("Breakdown by party", ('Republican', 'Democrat','Other','No Party Affiliation', 'Total'))
     tab1, tab2, tab3 = st.tabs(["Mail Ballots Not Yet Returned", "Voted Vote-By-Mail", "Voted Early"])
