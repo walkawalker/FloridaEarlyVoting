@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
 import requests
+import plotly.express as px
 import plotly.figure_factory as ff
 
 def counties():
@@ -31,7 +32,7 @@ def florida(dfc):
     dfVE['Fips']=dfflorida['FIPS'].tolist()
     dfVE['Compiled'] = dfVE['Compiled'].fillna(0)
     return dfNYR, dfVBM, dfVE
-def makeplot(df, check_flag):
+def makemapplot(df, party, check_flag):
     values = df[party].tolist()
     fips = df['Fips'].tolist()
     if check_flag:
@@ -47,8 +48,9 @@ def makeplot(df, check_flag):
         paper_bgcolor='rgb(229,229,229)',
         legend_title='Count by County',
         county_outline={'color': 'rgb(255,255,255)', 'width': 0.5},
-        exponent_format=True,
+        exponent_format=True
     )
+    fig.update_layout(height=700, margin={"r":0,"t":0,"l":0,"b":0})
     hover_ix, hover = [(ix, t) for ix, t in enumerate(fig['data']) if t.text][0]
     # mismatching lengths indicates bug
     if len(hover['text']) != len(df):
@@ -68,19 +70,28 @@ def makeplot(df, check_flag):
         fig['data'][hover_ix]['y'] = new_hover_y
     fig.layout.template = None
     return fig
-
+def makebarplot(df,party, strval):
+    bardf = df.nlargest(10, party)
+    fig = px.bar(bardf, x='County', y=party, title=f'Top 10 Counties for {party} {strval}')
+    fig.update_layout(title_x=0.5)
+    return fig
 if __name__ == "__main__":
     dfc = counties()
     df1, df2, df3 = florida(dfc)
     st.set_page_config(page_title = 'Early Voting Dashboard', layout = 'wide')
-    st.title('Midterm Elections 2022: Early Voting Dashboard')
+    st.title('Midterm Elections 2022: Florida Early Voting Dashboard')
     st.text('The data was last updated at: ' + df1['Compiled'][0])
     with st.container():
         party = st.radio("Breakdown by party", ('Republican', 'Democrat','Other','No Party Affiliation', 'Total'))
     tab1, tab2, tab3 = st.tabs(["Mail Ballots Not Yet Returned", "Voted Vote-By-Mail", "Voted Early"])
     with tab1:
-        st.plotly_chart(makeplot(df1, check_flag=True), use_container_width=False)
+        st.plotly_chart(makemapplot(df1, party, check_flag=True), use_container_width=True)
+        st.plotly_chart(makebarplot(df1, party, strval= 'Outstanding Mail Ballots'),use_container_width=True)
     with tab2:
-        st.plotly_chart(makeplot(df2, check_flag=True), use_container_width=False)
+        st.plotly_chart(makemapplot(df2, party, check_flag=True), use_container_width=True)
+        st.plotly_chart(makebarplot(df2, party, strval= 'Returned Mail Ballots'),use_container_width=True)
     with tab3:
-        st.plotly_chart(makeplot(df3, check_flag=False), use_container_width=False)
+        st.plotly_chart(makemapplot(df3, party, check_flag=False), use_container_width=True)
+        st.plotly_chart(makebarplot(df3, party, strval= 'Early Voters'),use_container_width=True)
+    
+        
