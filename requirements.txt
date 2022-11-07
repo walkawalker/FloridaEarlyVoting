@@ -1,5 +1,5 @@
 plotly==5.9.0
 beautifulsoup4==4.11.1
 lxml==4.6.2
-geopandas==0.3.0
+geopandas==0.8.1
 pyshp==1.2.10
